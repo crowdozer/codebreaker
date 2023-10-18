@@ -1,0 +1,40 @@
+---
+import Socials from "@/components/astro/Socials.astro";
+---
+
+<div class="border-t border-neutral-700 p-6 md:h-[300px]">
+  <div class="mx-auto max-w-4xl">
+    <div class="grid grid-cols-1 gap-16 md:grid-cols-2">
+      <!-- Left Column -->
+      <div class="top-0 flex flex-col">
+        <h2 class="mb-4 text-xl">Info</h2>
+        <p>this site is designed and maintained by me,</p>
+        <p>
+          public sourced on <a
+            href="https://www.github.com/crowdozer/codebreaker"
+            target="_blank"
+            rel="noopener noreferrer">github</a
+          >
+        </p>
+
+        <hr class="mt-2 hidden md:visible" />
+        <p class="mt-4">copyright (c) nobody</p>
+      </div>
+
+      <!-- Right Column -->
+      <div>
+        <h2 class="mb-4 text-xl">Business Offers</h2>
+        <p>If you want to work together, shoot an email to:</p>
+        <div class="mt-2 bg-neutral-800 p-2 px-4">
+          <p class="font-bold">business@crwdzr.io</p>
+        </div>
+
+        <h2 class="mb-4 mt-16 text-xl md:mt-8">Socials</h2>
+        <Socials />
+
+        <!-- spacer for mobile -->
+        <div class="mt-4 md:hidden"></div>
+      </div>
+    </div>
+  </div>
+</div>

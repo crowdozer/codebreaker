@@ -1,0 +1,53 @@
+{
+  "name": "",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^3.0.3",
+    "@astrojs/tailwind": "^5.0.2",
+    "@types/react": "^18.2.29",
+    "@types/react-dom": "^18.2.14",
+    "astro": "^3.3.2",
+    "astro-icon": "^0.8.1",
+    "clsx": "^2.0.0",
+    "prettier-plugin-astro": "^0.12.0",
+    "prettier-plugin-organize-attributes": "^1.0.0",
+    "prettier-plugin-tailwindcss": "^0.5.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss": "^3.3.3",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "prettier": {
+    "useTabs": true,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "astroAllowShorthand": true,
+    "overrides": [
+      {
+        "files": "*.astro",
+        "options": {
+          "parser": "astro"
+        }
+      }
+    ],
+    "pluginSearchDirs": [
+      "."
+    ],
+    "plugins": [
+      "tailwindcss-animate",
+      "prettier-plugin-astro",
+      "prettier-plugin-organize-attributes",
+      "prettier-plugin-tailwindcss"
+    ]
+  }
+}
