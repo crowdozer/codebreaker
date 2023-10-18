@@ -1,29 +1,29 @@
 ---
 interface Props {
-  title: string;
+	title: string
 }
 
-const { title } = Astro.props;
+const { title } = Astro.props
 
 // idk why request.url is localhost in prod,
 // but we need it to show prod in analytics
 const url = Astro.request.url.replace(
-  "http://localhost:4321",
-  "https://www.crwdzr.io"
-);
+	'http://localhost:4321',
+	'https://codebreaker-app.vercel.app/',
+)
 ---
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-SDQPP9QJ3H"
 ></script>
 
 <script define:vars={{ title, url }}>
-window.dataLayer = window.dataLayer || [];
+window.dataLayer = window.dataLayer || []
 function gtag() {
-  dataLayer.push(arguments);
+  dataLayer.push(arguments)
 }
-gtag("js", new Date());
-gtag("config", "G-SDQPP9QJ3H", {
+gtag('js', new Date())
+gtag('config', 'G-SDQPP9QJ3H', {
   page_title: title,
   page_path: url,
-});
+})
 </script>
