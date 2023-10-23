@@ -11,3 +11,5 @@ When you complete a vector, it is locked into a success state. If you make an in
 The game alternates between moving laterally and moving vertically. Your first move can be anywhere on the top row, the second one must be in the same column, then the same row, then column, and so forth.
 
 If you run out of moves, you're detected and it's game over.
+
+![image](https://github.com/crowdozer/codebreaker/assets/32648607/3f4a7138-90f0-4042-b34d-d4326aad18f9)
