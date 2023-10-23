@@ -11,21 +11,21 @@ export default function Status() {
 			{status === 'defeat' && (
 				<div>
 					<p className="mb-2 text-red-500">{getDefeatMessage()}</p>
-					<RestartButton />
+					<RestartButton text="TRY AGAIN" />
 				</div>
 			)}
 			{/* Victory Msg */}
 			{status === 'victory' && (
 				<div>
 					<p className="mb-2 text-green-500">{getVictoryMessage()}</p>
-					<RestartButton />
+					<RestartButton text="PlAY AGAIN" />
 				</div>
 			)}
 			{/* Working Msg */}
 			{status === 'working' && (
 				<div>
-					<p className="mb-2 text-yellow-500">hacking...</p>
-					<RestartButton />
+					<p className="mb-2 text-yellow-300">HACKING...</p>
+					<RestartButton text="PULL THE PLUG" />
 				</div>
 			)}
 			{/* Idle Msg */}
@@ -42,7 +42,7 @@ export default function Status() {
 	)
 }
 
-function RestartButton() {
+function RestartButton(props: { text?: string }) {
 	const {
 		restart,
 		classes: { borderClasses, textClasses },
@@ -53,7 +53,7 @@ function RestartButton() {
 			onClick={restart}
 			classes={{ button: cn(borderClasses, textClasses) }}
 		>
-			try again
+			{props.text || 'try again'}
 		</Button>
 	)
 }
@@ -61,7 +61,6 @@ function RestartButton() {
 const victoryMessages = [
 	"Firewall? More like fire-fall! We're in!",
 	"I've got root access, and suddenly, I'm in the mood for a root beer!",
-	"Ah, encryption. The digital chastity belt. But guess what? I've got the key!",
 	"Password? You mean 'pass-sword,' because we just cut right through it!",
 	'Mainframe, meet my alter ego: Mainfreak!',
 	"Looks like we've just RSVP'd to the Admin Party, and we didn't even bring a gift!",

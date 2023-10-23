@@ -33,6 +33,14 @@ export type CodebreakerAction =
 	| { type: 'ENABLE_FIRST_ROW' }
 	| { type: 'UPDATE_REMAINING_MOVES' }
 
+export type GameStatus = 'working' | 'victory' | 'defeat' | 'idle'
+
+export type GameStyleClasses = {
+	bgClasses: { [key: string]: boolean }
+	textClasses: { [key: string]: boolean }
+	borderClasses: { [key: string]: boolean }
+}
+
 /**
  * Internal application state
  */
@@ -82,6 +90,16 @@ export interface CodebreakerState {
 	 * Whether the user can select along the current row or col
 	 */
 	selectionMode: SelectionMode
+
+	/**
+	 * Shorthand indicators for what the state of the game is
+	 */
+	status: GameStatus
+
+	/**
+	 * Various colorful classes that can be applied to the UI depending on gamestate
+	 */
+	classes: GameStyleClasses
 }
 
 /**
@@ -108,14 +126,6 @@ export interface CodebreakerAPI {
 	restart: () => void
 	// Select a given tile
 	selectTile: (row: number, col: number) => void
-	// The current game status
 	status: GameStatus
-	// Colorful classes that should be applied in various situations
-	classes: {
-		bgClasses: { [key: string]: boolean }
-		textClasses: { [key: string]: boolean }
-		borderClasses: { [key: string]: boolean }
-	}
+	classes: GameStyleClasses
 }
-
-export type GameStatus = 'working' | 'victory' | 'defeat' | 'idle'

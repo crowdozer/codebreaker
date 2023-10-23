@@ -23,11 +23,11 @@ export default function Buffer() {
 					borderClasses,
 				)}
 			>
-				<div className="flex flex-row flex-wrap justify-start gap-1 xl:justify-center">
+				<div className="flex flex-row gap-1 xl:justify-center xl:gap-1">
 					{Array.from({ length: initialRemainingMoves }, (_, index) => (
 						<div
 							key={index}
-							className={cn('border px-4 py-4', {
+							className={cn('grow border px-0 py-4 xl:px-4', {
 								// Remaining move available
 								'border-neutral-800 bg-neutral-800/25': index >= detectedIndex,
 								// Move is not available

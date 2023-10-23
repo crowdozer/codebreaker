@@ -2,6 +2,8 @@ import { getRandomInt } from '@/lib/random-int'
 import type {
 	CodebreakerBoard,
 	CodebreakerState,
+	GameStatus,
+	GameStyleClasses,
 	SelectionMode,
 	Sequence,
 	Tile,
@@ -24,6 +26,8 @@ export function getInitialState(): CodebreakerState {
 		selectionMode: 'row',
 		victory: false,
 		defeat: false,
+		status: 'idle',
+		classes: getUIClasses('idle'),
 	} satisfies CodebreakerState
 }
 
@@ -86,10 +90,63 @@ export function getLastNClickedValues(
 	moves: string[],
 	n: number,
 ): string[] {
+	// slice for the trailing n entries
+	// then map them to board tiles
 	return moves.slice(n * -1).map((moveStr) => {
+		// convert to numbers for use in indexes
 		const [yCoord, xCoord] = moveStr.split('-').map(Number)
 
+		// grab the board tiles and return
 		return board[yCoord][xCoord].value
+	})
+}
+
+/**
+ * Generates the initial gameboard, randomly populated with no solution present
+ *
+ * @param size size of the board (it's square)
+ * @param strings hex string source
+ * @returns
+ */
+export function generateInitialBoard(
+	size: number,
+	strings: string[],
+): string[][] {
+	return (
+		Array.from({ length: size })
+			// map over each rows and establish the columns
+			.map(() => {
+				// populate every cell with a random hex string
+				return Array.from({ length: size }).map(() => {
+					return strings[Math.floor(Math.random() * strings.length)]
+				})
+			})
+	)
+}
+
+/**
+ * Generates the goal sequences the user must solve
+ *
+ * @param numSeq the number of sequences the user must solve
+ * @param minSeqLen minimum sequence length
+ * @param maxSeqLen maximum sequence length
+ * @param strings hex string source
+ * @returns
+ */
+export function generateTargetSequences(
+	numSeq: number,
+	minSeqLen: number,
+	maxSeqLen: number,
+	strings: string[],
+): string[][] {
+	return Array.from({ length: numSeq }).map(() => {
+		const seqLen = getRandomInt(minSeqLen, maxSeqLen)
+
+		const values = Array.from({ length: seqLen }).map(() => {
+			return strings[Math.floor(Math.random() * strings.length)]
+		})
+
+		return values
 	})
 }
 
@@ -109,42 +166,30 @@ export function getLastNClickedValues(
  */
 export function generateBoard(
 	size: number = 7,
-	numSeq: number = 3,
+	numSeq: number = 4,
 	minSeqLen: number = 2,
 	maxSeqLen: number = 4,
 	numHexValues: number = 8,
 ): [Sequence[], CodebreakerBoard, [number, number][]] {
-	// Construct the empty board
-	const emptyBoard = [...new Array(size)].map((row) => [...new Array(size)])
-
 	// Generate the unqiue hex values
 	const strings = generateNUniqueHexStrings(numHexValues)
 
+	// Generate the initial gameboard
+	const initialBoard = generateInitialBoard(size, strings)
+
 	// Generate all of the target goal sequences
-	const emptySequences: string[][] = [...new Array(numSeq)].map(() => {
-		const seqLen = getRandomInt(minSeqLen, maxSeqLen)
+	const emptySequences = generateTargetSequences(
+		numSeq,
+		minSeqLen,
+		maxSeqLen,
+		strings,
+	)
 
-		const values = [...new Array(seqLen)].map(() => {
-			return strings[Math.floor(Math.random() * strings.length)]
-		})
+	// Generate, inject, and store the intended solution path
+	const solution = injectSolution(emptySequences, initialBoard)
 
-		return values
-	})
-
-	// Populate the board with random entries from the strings array
-	for (let i = 0; i < emptyBoard.length; i++) {
-		const row = emptyBoard[i]
-		for (let j = 0; j < row.length; j++) {
-			emptyBoard[i][j] = strings[Math.floor(Math.random() * strings.length)]
-		}
-	}
-
-	// Now pre-generate an intended solution (i.e row1col2, row5col2)
-	// that covers all of the sequences with no extra steps
-	const solution = injectSolution(emptySequences, emptyBoard)
-
-	// Now build the proper board/tile structures
-	const finalBoard: CodebreakerBoard = emptyBoard.map((row, rowIndex) => {
+	// Now build the proper board/tile data structures
+	const finalBoard: CodebreakerBoard = initialBoard.map((row, rowIndex) => {
 		return row.map((colHex, colIndex) => {
 			return {
 				value: colHex,
@@ -156,7 +201,7 @@ export function generateBoard(
 		})
 	})
 
-	// Now build the proper sequence structures
+	// Now build the proper sequence data structures
 	const sequences = emptySequences.map((seqValues) => {
 		return {
 			solved: false,
@@ -167,6 +212,15 @@ export function generateBoard(
 
 	// We have everything we need, return it all
 	return [sequences, finalBoard, solution]
+}
+
+/**
+ * Shuffles an array in place
+ *
+ * @param array any array
+ */
+function shuffleInPlace(array: any[]): void {
+	array.sort(() => (Math.random() > 0.5 ? 1 : -1))
 }
 
 /**
@@ -182,9 +236,8 @@ export function injectSolution(
 ): [number, number][] {
 	// We will first determine the intended order of the sequences,
 	// shuffling it to ensure it is always unpredictable
-	const shuffledSequences = [...emptySequences.map((seq) => [...seq])].sort(
-		() => (Math.random() > 0.5 ? 1 : -1),
-	)
+	const clonedSequences = [...emptySequences.map((seq) => [...seq])]
+	shuffleInPlace(clonedSequences)
 
 	// Data structure to keep track of used [row,col] indexes
 	const usedCells = new Set<string>()
@@ -228,7 +281,7 @@ export function injectSolution(
 	const solution: [number, number][] = []
 
 	// Now start injecting the solution
-	shuffledSequences.forEach((sequence) => {
+	clonedSequences.forEach((sequence) => {
 		sequence.forEach((hex) => {
 			if (useRow) {
 				rowIndex = getUniqueRowIndex()
@@ -259,15 +312,12 @@ export function injectSolution(
  */
 export function generateNUniqueHexStrings(n: number): string[] {
 	// Create an array of numbers from 0 to 255
-	const numbers = Array.from({ length: 256 }, (_, i) => i)
+	const numbers = Array.from({ length: 256 }).map((_, i) => i)
 
-	// Shuffle the array
-	for (let i = numbers.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1))
-		;[numbers[i], numbers[j]] = [numbers[j], numbers[i]]
-	}
+	// Shuffle the numbers
+	shuffleInPlace(numbers)
 
-	// Take first 'n' numbers, convert them to hexadecimal strings, and return them
+	// Take first n, convert them to hex, and return them
 	return numbers
 		.slice(0, n)
 		.map((num) => num.toString(16).toUpperCase().padStart(2, '0'))
@@ -275,8 +325,7 @@ export function generateNUniqueHexStrings(n: number): string[] {
 
 /**
  * Determines the selection mode based on the moves array
- *
- * Initially it is null, then it flipflops between col/row, starting with col
+ * Initially it is row, then it flipflops between col/row
  */
 export function getSelectionMode(moves: string[]): SelectionMode {
 	if (!moves.length) return 'row'
@@ -362,4 +411,30 @@ export function getStatus(
 	if (defeat) return 'defeat'
 	if (moves.length) return 'working'
 	return 'idle'
+}
+
+/**
+ * Returns the UI color classes based on game state
+ *
+ * @param status the game status
+ * @returns
+ */
+export function getUIClasses(status: GameStatus): GameStyleClasses {
+	const bgClasses = {
+		'bg-yellow-300 text-neutral-950': status === 'working' || status === 'idle',
+		'bg-red-500 text-neutral-950': status === 'defeat',
+		'bg-green-400 text-neutral-950': status === 'victory',
+	}
+	const textClasses = {
+		'text-yellow-300': status === 'working' || status === 'idle',
+		'text-red-500': status === 'defeat',
+		'text-green-400': status === 'victory',
+	}
+	const borderClasses = {
+		'border-yellow-300': status === 'working' || status === 'idle',
+		'border-red-500': status === 'defeat',
+		'border-green-400': status === 'victory',
+	}
+
+	return { bgClasses, textClasses, borderClasses }
 }

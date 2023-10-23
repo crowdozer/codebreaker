@@ -6,6 +6,8 @@ import {
 	getInitialState,
 	isVictorious,
 	isDefeated,
+	getStatus,
+	getUIClasses,
 } from './utils'
 import type { CodebreakerAction, Tile, CodebreakerState } from './types'
 
@@ -28,19 +30,13 @@ export default function reducer(
 		case 'ENABLE_FIRST_ROW': {
 			return {
 				...state,
-				/**
-				 * Mark the selection mode as 'row' if it isn't already
-				 */
+				// Mark the selection mode as 'row' if it isn't already
 				selectionMode: 'row',
-				/**
-				 * Mark the first row's tiles as clickable
-				 */
+				// Mark only the first row as clickable, disable others
 				board: state.board.map((row, rowIndex) => {
-					if (rowIndex !== 0) return row
-
 					return row.map((tile) => ({
 						...tile,
-						clickable: true,
+						clickable: rowIndex === 0,
 					}))
 				}),
 			}
@@ -48,9 +44,12 @@ export default function reducer(
 		case 'MOVE':
 			return {
 				...state,
+				// append the move to state
 				moves: state.moves.concat(
 					`${action.data.yCoord}-${action.data.xCoord}`,
 				),
+				// set the gamestatus as working
+				status: 'working',
 			}
 		case 'UPDATE_SELECTION_MODE':
 			return {
@@ -119,6 +118,8 @@ export default function reducer(
 				return {
 					...state,
 					victory: true,
+					status: 'victory',
+					classes: getUIClasses('victory'),
 				}
 			}
 
@@ -131,6 +132,8 @@ export default function reducer(
 				return {
 					...state,
 					defeat: true,
+					status: 'defeat',
+					classes: getUIClasses('defeat'),
 				}
 			}
 

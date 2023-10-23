@@ -33,7 +33,7 @@ export default function Codebreaker() {
 			<div className="mx-auto px-1 pt-1 xl:my-8 xl:w-[80%] xl:px-0 xl:pt-0">
 				{/* UI AREA */}
 				<div className={cn('relative w-full border p-4', borderClasses)}>
-					<div className="grid grid-cols-1 gap-8 pt-0 xl:grid-cols-[2fr_3fr] xl:pt-8">
+					<div className="grid grid-cols-1 gap-4 pt-0 xl:grid-cols-[2fr_3fr] xl:gap-8 xl:pt-8">
 						{/* TIMER */}
 						<div className="space-y-2">
 							<div className="flex flex-row justify-between">
@@ -78,7 +78,7 @@ export default function Codebreaker() {
 					</div>
 
 					{/* GAME STATUS */}
-					<div className={cn('mt-8 border', borderClasses)}>
+					<div className={cn('mt-4 border xl:mt-8', borderClasses)}>
 						<h1
 							className={cn(
 								'px-2 py-1 text-xl font-bold text-neutral-950',
