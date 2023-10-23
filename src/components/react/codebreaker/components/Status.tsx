@@ -1,5 +1,5 @@
 import { Button, cn } from '@/components/react/ui'
-import { getRandomInt } from '@/lib/random-int'
+import { getRandomInt } from '../utils'
 import { useGame } from '../useCodebreaker'
 
 export default function Status() {
