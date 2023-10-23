@@ -109,10 +109,10 @@ export function getLastNClickedValues(
  */
 export function generateBoard(
 	size: number = 7,
-	numSeq: number = 1,
+	numSeq: number = 3,
 	minSeqLen: number = 2,
-	maxSeqLen: number = 3,
-	numHexValues: number = 9,
+	maxSeqLen: number = 4,
+	numHexValues: number = 8,
 ): [Sequence[], CodebreakerBoard, [number, number][]] {
 	// Construct the empty board
 	const emptyBoard = [...new Array(size)].map((row) => [...new Array(size)])
