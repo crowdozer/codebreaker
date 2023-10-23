@@ -1,4 +1,3 @@
-import { getRandomInt } from '@/lib/random-int'
 import type {
 	CodebreakerBoard,
 	CodebreakerState,
@@ -516,4 +515,15 @@ export function formatMilliseconds(milliseconds: number): string {
 
 	// Format the string
 	return `${paddedSeconds}:${paddedMilliseconds}`
+}
+
+/**
+ * Generates a random int between min and max
+ * @param min
+ * @param max
+ */
+export function getRandomInt(min: number, max: number): number {
+	min = Math.ceil(min)
+	max = Math.floor(max)
+	return Math.floor(Math.random() * (max - min + 1)) + min
 }
