@@ -5,11 +5,13 @@
 @font-face {
 	font-family: Rubik;
 	src: url(/fonts/RubikMonoOne-Regular.ttf);
+	font-display: swap;
 }
 
 @font-face {
 	font-family: Plex;
 	src: url(/fonts/IBMPlexMono-Medium.ttf);
+	font-display: swap;
 }
 
 /**
