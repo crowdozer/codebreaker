@@ -108,4 +108,14 @@ export interface CodebreakerAPI {
 	restart: () => void
 	// Select a given tile
 	selectTile: (row: number, col: number) => void
+	// The current game status
+	status: GameStatus
+	// Colorful classes that should be applied in various situations
+	classes: {
+		bgClasses: { [key: string]: boolean }
+		textClasses: { [key: string]: boolean }
+		borderClasses: { [key: string]: boolean }
+	}
 }
+
+export type GameStatus = 'working' | 'victory' | 'defeat' | 'idle'
