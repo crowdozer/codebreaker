@@ -33,9 +33,11 @@ export default function Buffer() {
 								// Move is not available
 								'border-yellow-800/50 bg-yellow-800/25': index < detectedIndex,
 								// Victory
-								'border-green-500/50 bg-green-500/25': victory,
+								'border-green-500/50 bg-green-500/25':
+									victory && index < detectedIndex,
 								// Defeat
-								'border-red-500/50 bg-red-500/25': defeat,
+								'border-red-500/50 bg-red-500/25':
+									defeat && index < detectedIndex,
 							})}
 						/>
 					))}
