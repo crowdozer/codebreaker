@@ -5,6 +5,7 @@ import Status from './components/Status'
 import Buffer from './components/Buffer'
 import FAQ from './components/FAQ'
 import GameBoard from './components/GameBoard'
+import Timer from './components/Timer'
 
 export default function Codebreaker() {
 	const api = useCodebreaker()
@@ -40,15 +41,7 @@ export default function Codebreaker() {
 									BREACH TIME{' '}
 									<span className="hidden sm:inline-block">REMAINING</span>
 								</h2>
-								<div
-									className={cn(
-										'min-w-[92px] self-center border p-2 text-center text-xl',
-										borderClasses,
-										textClasses,
-									)}
-								>
-									23.58
-								</div>
+								<Timer />
 							</div>
 							<div className={cn('border-b-4', borderClasses)}></div>
 						</div>
