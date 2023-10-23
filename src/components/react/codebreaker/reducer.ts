@@ -50,6 +50,9 @@ export default function reducer(
 				),
 				// set the gamestatus as working
 				status: 'working',
+				// if that was the first move, update ui classes
+				classes:
+					state.status === 'idle' ? getUIClasses('working') : state.classes,
 			}
 		case 'UPDATE_SELECTION_MODE':
 			return {

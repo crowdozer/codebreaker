@@ -477,17 +477,20 @@ export function getStatus(
  */
 export function getUIClasses(status: GameStatus): GameStyleClasses {
 	const bgClasses = {
-		'bg-yellow-300 text-neutral-950': status === 'working' || status === 'idle',
+		'bg-neutral-800 text-neutral-200': status === 'idle',
+		'bg-yellow-300 text-neutral-950': status === 'working',
 		'bg-red-500 text-neutral-950': status === 'defeat',
 		'bg-green-400 text-neutral-950': status === 'victory',
 	}
 	const textClasses = {
-		'text-yellow-300': status === 'working' || status === 'idle',
+		'text-neutral-200': status === 'idle',
+		'text-yellow-300': status === 'working',
 		'text-red-500': status === 'defeat',
 		'text-green-400': status === 'victory',
 	}
 	const borderClasses = {
-		'border-yellow-300': status === 'working' || status === 'idle',
+		'border-neutral-600': status === 'idle',
+		'border-yellow-300': status === 'working',
 		'border-red-500': status === 'defeat',
 		'border-green-400': status === 'victory',
 	}

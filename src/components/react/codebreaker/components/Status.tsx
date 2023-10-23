@@ -60,27 +60,28 @@ function RestartButton(props: { text?: string }) {
 
 const victoryMessages = [
 	"Firewall? More like fire-fall! We're in!",
-	"I've got root access, and suddenly, I'm in the mood for a root beer!",
-	"Password? You mean 'pass-sword,' because we just cut right through it!",
+	"Victory! Who's the n00b now?",
+	"Pwned! What's next? Cracking the Pentagon?",
 	'Mainframe, meet my alter ego: Mainfreak!',
-	"Looks like we've just RSVP'd to the Admin Party, and we didn't even bring a gift!",
-	"The only thing more secure than this system is my grandma's cookie jar—and I cracked that when I was five!",
-	'Ah, the sound of bypassing security. Music to my ears!',
+	'Winning never gets old, but that took you long enough!',
+	"Aced it! Are you sure you're not undercover NSA?",
 	"They should really update their Terms of Service to include 'No Hackers Allowed.' Too late now!",
 	'System security just asked me for a dance, and I led the whole way!',
+	"Success! You make hacking look so easy, it's almost criminal.",
+	"Looks like we've just RSVP'd to the Admin Party, and we didn't even bring a gift!",
 ]
 
 const defeatMessages = [
-	'Oops, looks like we just got the VIP backstage pass to the Firewall Concert!',
-	"Ah, we've been caught! Someone call the Internet police!",
-	'Red alert! Red alert! Abandon ship! Or, you know, just close the browser.',
-	"Well, well, well, if it isn't Captain Obvious saying we've been detected!",
-	'Busted? Time for Operation Ghost Protocol: minimize window and act natural.',
-	"Ah, they've detected us! Time to switch from hacking to snacking.",
-	'Intrusion detected? More like invitation declined!',
-	"We've got company, and I don't think they're here to deliver pizza.",
-	"It's not a bug, it's a feature! A feature that tells them we're here, unfortunately.",
-	'Whoa, we tripped the alarm! Do we get a prize?',
+	'Oops! Looks like you tripped the alarm. Better luck next life!',
+	'Game over! Even my grandma hacks better than that, and she thinks a mouse is a pet!',
+	"Failed? You sure you're not working for the antivirus?",
+	'Wow, caught already? That was quicker than a Windows update!',
+	'So close, yet so far. Need some cheat codes?',
+	"You got caught? What's next, forgetting your own password?",
+	"Is that all you've got? My toaster could hack better!",
+	'Ouch! The firewall sends its regards.',
+	'Defeated again? Maybe stick to Minesweeper.',
+	'Aw, caught in the act? Even a 404 is less disappointing.',
 ]
 
 const idleMessages = [
