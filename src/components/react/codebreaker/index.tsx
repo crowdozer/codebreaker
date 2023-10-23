@@ -1,4 +1,4 @@
-import { Button, cn } from '@/components/react/ui'
+import { cn } from '@/components/react/ui'
 import { useCodebreaker, GameContext } from './useCodebreaker'
 import Sequences from './components/Sequences'
 import Status from './components/Status'
