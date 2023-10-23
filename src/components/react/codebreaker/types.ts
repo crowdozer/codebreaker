@@ -32,6 +32,7 @@ export type CodebreakerAction =
 	| { type: 'UPDATE_SEQUENCES' }
 	| { type: 'ENABLE_FIRST_ROW' }
 	| { type: 'UPDATE_REMAINING_MOVES' }
+	| { type: 'START_TIMER' }
 
 export type GameStatus = 'working' | 'victory' | 'defeat' | 'idle'
 
@@ -100,6 +101,16 @@ export interface CodebreakerState {
 	 * Various colorful classes that can be applied to the UI depending on gamestate
 	 */
 	classes: GameStyleClasses
+
+	/**
+	 * When the game started
+	 */
+	startTime: Date | null
+
+	/**
+	 * How much time the user was allocated
+	 */
+	initialTimeRemaining: number
 }
 
 /**
@@ -128,4 +139,6 @@ export interface CodebreakerAPI {
 	selectTile: (row: number, col: number) => void
 	status: GameStatus
 	classes: GameStyleClasses
+	startTime: Date | null
+	initialTimeRemaining: number
 }

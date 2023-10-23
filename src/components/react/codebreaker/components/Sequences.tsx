@@ -56,7 +56,7 @@ function SequenceTile(props: SequenceTileProps) {
 		<td key={hexIndex} className="p-0.5 text-center">
 			<div
 				className={cn(
-					'border border-neutral-800 bg-neutral-800/50 p-2 px-4',
+					'border border-neutral-800 bg-neutral-800/50 px-4 py-0.5 md:py-2',
 					// partial sequence solving status
 					isPartiallySolved && 'bg-yellow-300 text-neutral-950',
 					// sequence is locked in

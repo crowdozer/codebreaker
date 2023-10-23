@@ -1,36 +1,17 @@
-import {
-	useEffect,
-	useReducer,
-	createContext,
-	useMemo,
-	useContext,
-} from 'react'
-import { getInitialState, getStatus } from './utils'
+import { useEffect, useReducer, createContext, useContext, useRef } from 'react'
+import { getInitialState } from './utils'
 import type { CodebreakerAPI } from './types'
 import reducer from './reducer'
-
-/**
- * Game context provider, so children can access the entire game state
- */
-export const GameContext = createContext<CodebreakerAPI | null>(null)
-
-/**
- * Hook to automatically acquire game context
- */
-export function useGame(): CodebreakerAPI {
-	return useContext(GameContext) as CodebreakerAPI
-}
 
 /**
  * Exposes all state and interactivity required for the codebreaker game
  */
 export function useCodebreaker(): CodebreakerAPI {
 	const [state, dispatch] = useReducer(reducer, getInitialState())
+	const timerIntervalRef = useRef<number | null>(null)
 
 	/**
-	 * Ran when the user clicks a tile. Ensures the move is valid,
-	 * then if it is, adds it to the moves stack. The tiles and score
-	 * conditions will be updated automatically.
+	 * Performs all required sideeffects when the user clicks a tile
 	 *
 	 * @param rowIndex
 	 * @param colIndex
@@ -56,7 +37,36 @@ export function useCodebreaker(): CodebreakerAPI {
 	}
 
 	/**
-	 * setup/restart
+	 * Clears the timer interval
+	 */
+	function clear(): void {
+		if (timerIntervalRef.current) {
+			clearInterval(timerIntervalRef.current)
+			timerIntervalRef.current = null
+			// console.log('useCodebreaker >> cleared interval')
+		}
+	}
+
+	/**
+	 * Starts the countdown timer
+	 */
+	function startCountdown() {
+		dispatch({ type: 'START_TIMER' })
+
+		// set the gameover time in ms
+		const intervalLength = (state.initialTimeRemaining + 0.1) * 1000
+
+		// start a timeout interval
+		const interval = setTimeout(() => {
+			// console.log('dispatching defeat')
+			dispatch({ type: 'CHECK_VICTORY_DEFEAT' })
+		}, intervalLength)
+
+		timerIntervalRef.current = interval
+	}
+
+	/**
+	 * setup/restart the game
 	 */
 	function initialize() {
 		dispatch({ type: 'SETUP' })
@@ -69,6 +79,25 @@ export function useCodebreaker(): CodebreakerAPI {
 	useEffect(() => {
 		initialize()
 	}, [])
+
+	/**
+	 * Listens to the game status and manages the countdown interval
+	 */
+	useEffect(() => {
+		switch (state.status) {
+			case 'idle':
+				break
+			case 'working':
+				// console.log('useCodebreaker >> startCountdown()')
+				startCountdown()
+				break
+			case 'defeat': // fall through
+			case 'victory': // fall through
+				// console.log('useCodebreaker >> clear()')
+				clear()
+				break
+		}
+	}, [state.status])
 
 	return {
 		moves: state.moves,
@@ -84,5 +113,19 @@ export function useCodebreaker(): CodebreakerAPI {
 		selectTile,
 		status: state.status,
 		classes: state.classes,
+		startTime: state.startTime,
+		initialTimeRemaining: state.initialTimeRemaining,
 	} satisfies CodebreakerAPI
+}
+
+/**
+ * Game context provider, so children can access the entire game state
+ */
+export const GameContext = createContext<CodebreakerAPI | null>(null)
+
+/**
+ * Hook to automatically acquire game context
+ */
+export function useGame(): CodebreakerAPI {
+	return useContext(GameContext) as CodebreakerAPI
 }

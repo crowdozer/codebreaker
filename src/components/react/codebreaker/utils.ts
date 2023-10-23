@@ -13,7 +13,28 @@ import type {
  * Generates the initial board state
  */
 export function getInitialState(): CodebreakerState {
-	const [sequences, initialBoard, solution] = generateBoard()
+	/**
+	 * Difficulty config
+	 */
+
+	const timeAllocated = 60
+	const boardSize = 7
+	const numSeq = 4
+	const minSeqLen = 2
+	const maxSeqLen = 4
+	const numHexValues = boardSize
+
+	/**
+	 * Board generation
+	 */
+
+	const [sequences, initialBoard, solution] = generateBoard(
+		boardSize,
+		numSeq,
+		minSeqLen,
+		maxSeqLen,
+		numHexValues,
+	)
 	const remainingMoves = getInitialRemainingMoves(sequences)
 
 	return {
@@ -28,6 +49,8 @@ export function getInitialState(): CodebreakerState {
 		defeat: false,
 		status: 'idle',
 		classes: getUIClasses('idle'),
+		startTime: null,
+		initialTimeRemaining: timeAllocated,
 	} satisfies CodebreakerState
 }
 
@@ -165,11 +188,11 @@ export function generateTargetSequences(
  * @returns [sequences, board, solution]
  */
 export function generateBoard(
-	size: number = 7,
-	numSeq: number = 4,
-	minSeqLen: number = 2,
-	maxSeqLen: number = 4,
-	numHexValues: number = 8,
+	size: number,
+	numSeq: number,
+	minSeqLen: number,
+	maxSeqLen: number,
+	numHexValues: number,
 ): [Sequence[], CodebreakerBoard, [number, number][]] {
 	// Generate the unqiue hex values
 	const strings = generateNUniqueHexStrings(numHexValues)
@@ -219,7 +242,7 @@ export function generateBoard(
  *
  * @param array any array
  */
-function shuffleInPlace(array: any[]): void {
+export function shuffleInPlace(array: any[]): void {
 	array.sort(() => (Math.random() > 0.5 ? 1 : -1))
 }
 
@@ -383,17 +406,50 @@ export function isVictorious(sequences: Sequence[]): boolean {
 }
 
 /**
+ * Checks if the two given dates are more than 60s apart
+ */
+export function hasTimeElapsed(
+	latterDate: Date,
+	formerDate: Date,
+	seconds: number,
+): boolean {
+	// Get the time difference in milliseconds
+	const differenceInMilliseconds = Math.abs(
+		latterDate.getTime() - formerDate.getTime(),
+	)
+
+	// Convert to seconds and check if it's more than 60 seconds
+	return differenceInMilliseconds / 1000 > seconds
+}
+
+/**
  * returns whether or not the user is defeated
  * @param remainingMoves how many moves the user has left
  * @param numMovesAllowed how many moves were allowed during the game
+ * @param startTime when the game was started
+ * @param initialTimeRemaining how much time the user was allocated
  * @returns
  */
 export function isDefeated(
 	remainingMoves: number,
 	numMovesAllowed: number,
+	startTime: null | Date,
+	initialTimeRemaining: number,
 ): boolean {
-	// if numMovesAllowed = 0, the game has not started
-	return numMovesAllowed && remainingMoves === 0 ? true : false
+	// If the user had moves but is out of moves
+	if (numMovesAllowed && remainingMoves === 0) {
+		return true
+	}
+
+	// If there is a timer that has expired
+	if (startTime) {
+		const currTime = new Date()
+		if (hasTimeElapsed(currTime, startTime, initialTimeRemaining)) {
+			return true
+		}
+	}
+
+	return false
 }
 
 /**
@@ -437,4 +493,24 @@ export function getUIClasses(status: GameStatus): GameStyleClasses {
 	}
 
 	return { bgClasses, textClasses, borderClasses }
+}
+
+/**
+ * Formats a value in ms as "ss:ms"
+ */
+export function formatMilliseconds(milliseconds: number): string {
+	// Convert milliseconds to total seconds
+	const totalSeconds = milliseconds / 1000
+
+	// Get whole seconds and remaining milliseconds
+	const seconds = Math.floor(totalSeconds)
+	// Divison by 10 to keep it two digits
+	const remainingMilliseconds = Math.floor((milliseconds % 1000) / 10)
+
+	// Pad with leading zeros
+	const paddedSeconds = String(seconds).padStart(2, '0')
+	const paddedMilliseconds = String(remainingMilliseconds).padStart(2, '0')
+
+	// Format the string
+	return `${paddedSeconds}:${paddedMilliseconds}`
 }

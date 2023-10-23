@@ -128,7 +128,14 @@ export default function reducer(
 			 * to check for the defeat condition
 			 */
 			const remainingMoves = state.initialRemainingMoves - state.moves.length
-			if (isDefeated(remainingMoves, state.initialRemainingMoves)) {
+			if (
+				isDefeated(
+					remainingMoves,
+					state.initialRemainingMoves,
+					state.startTime,
+					state.initialTimeRemaining,
+				)
+			) {
 				return {
 					...state,
 					defeat: true,
@@ -138,6 +145,11 @@ export default function reducer(
 			}
 
 			return state
+		case 'START_TIMER':
+			return {
+				...state,
+				startTime: new Date(),
+			}
 		default:
 			return {
 				...state,

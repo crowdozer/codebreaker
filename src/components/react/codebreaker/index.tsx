@@ -35,20 +35,16 @@ export default function Codebreaker() {
 				<div className={cn('relative w-full border p-4', borderClasses)}>
 					<div className="grid grid-cols-1 gap-4 pt-0 xl:grid-cols-[2fr_3fr] xl:gap-8 xl:pt-8">
 						{/* TIMER */}
-						<div className="space-y-2">
-							<div className="flex flex-row justify-between">
-								<h2 className={cn('self-center text-lg', textClasses)}>
-									BREACH TIME{' '}
-									<span className="hidden sm:inline-block">REMAINING</span>
-								</h2>
-								<Timer />
-							</div>
-							<div className={cn('border-b-4', borderClasses)}></div>
-						</div>
+						<Timer />
 
 						{/* DETECTION */}
 						<div className="relative mt-8 xl:mt-0">
-							<h2 className={cn('t-0 l-0 absolute -mt-8 text-lg', textClasses)}>
+							<h2
+								className={cn(
+									't-0 l-0 absolute -mt-8 text-sm lg:text-lg',
+									textClasses,
+								)}
+							>
 								BUFFER
 							</h2>
 							<Buffer />
@@ -56,8 +52,10 @@ export default function Codebreaker() {
 
 						{/* CODE MATRIX */}
 						<div className={cn('border', borderClasses)}>
-							<div className={cn('px-4 py-2 text-neutral-950', bgClasses)}>
-								<h1 className="text-2xl">CODE MATRIX</h1>
+							<div
+								className={cn('px-4 py-1 text-neutral-950 lg:py-2', bgClasses)}
+							>
+								<h1 className="text-base lg:text-2xl">CODE MATRIX</h1>
 							</div>
 							<GameBoard />
 						</div>
@@ -66,7 +64,7 @@ export default function Codebreaker() {
 						<div className="mx-auto w-full max-w-none lg:mx-0 lg:max-w-none xl:w-auto xl:max-w-sm">
 							<div className={cn('border', borderClasses)}>
 								<div className={cn('border-b px-4 py-2', borderClasses)}>
-									<h2 className={cn('text-lg', textClasses)}>
+									<h2 className={cn('text-sm lg:text-lg', textClasses)}>
 										INJECTION VECTORS
 									</h2>
 								</div>
@@ -81,7 +79,7 @@ export default function Codebreaker() {
 					<div className={cn('mt-4 border xl:mt-8', borderClasses)}>
 						<h1
 							className={cn(
-								'px-2 py-1 text-xl font-bold text-neutral-950',
+								'px-2 py-1 text-sm font-bold text-neutral-950 lg:text-xl',
 								bgClasses,
 							)}
 						>
