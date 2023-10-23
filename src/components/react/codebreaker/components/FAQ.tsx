@@ -9,7 +9,7 @@ export default function FAQ(props: FAQProps) {
 
 	return (
 		<div className="space-y-1">
-			<Accordion label="INSTRUCTIONS" defaultOpen>
+			<Accordion label="INSTRUCTIONS">
 				<div className="space-y-4 bg-neutral-800/25 p-4 font-mono text-sm">
 					<p>
 						You need to solve for the injection vectors by clicking memory

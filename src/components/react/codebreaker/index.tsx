@@ -85,7 +85,7 @@ export default function Codebreaker() {
 						<Status />
 					</div>
 				</div>
-				<div className="my-2">
+				<div className="mx-auto my-2 max-w-4xl xl:my-8">
 					<FAQ solution={api.solution} />
 				</div>
 			</div>
