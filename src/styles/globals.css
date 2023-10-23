@@ -3,67 +3,67 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: Rubik;
-  src: url(/fonts/RubikMonoOne-Regular.ttf);
+	font-family: Rubik;
+	src: url(/fonts/RubikMonoOne-Regular.ttf);
 }
 
 @font-face {
-  font-family: Plex;
-  src: url(/fonts/IBMPlexMono-Medium.ttf);
+	font-family: Plex;
+	src: url(/fonts/IBMPlexMono-Medium.ttf);
 }
 
 /**
  * shadcn presets
  */
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 346.8 77.2% 49.8%;
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 346.8 77.2% 49.8%;
-    --radius: 0rem;
-  }
+	:root {
+		--background: 0 0% 100%;
+		--foreground: 240 10% 3.9%;
+		--card: 0 0% 100%;
+		--card-foreground: 240 10% 3.9%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 240 10% 3.9%;
+		--primary: 346.8 77.2% 49.8%;
+		--primary-foreground: 355.7 100% 97.3%;
+		--secondary: 240 4.8% 95.9%;
+		--secondary-foreground: 240 5.9% 10%;
+		--muted: 240 4.8% 95.9%;
+		--muted-foreground: 240 3.8% 46.1%;
+		--accent: 240 4.8% 95.9%;
+		--accent-foreground: 240 5.9% 10%;
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 0 0% 98%;
+		--border: 240 5.9% 90%;
+		--input: 240 5.9% 90%;
+		--ring: 346.8 77.2% 49.8%;
+		--radius: 0rem;
+	}
 
-  .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 0 0% 95%;
-    --card: 24 9.8% 10%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 346.8 77.2% 49.8%;
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 346.8 77.2% 49.8%;
-  }
+	.dark {
+		--background: 20 14.3% 4.1%;
+		--foreground: 0 0% 95%;
+		--card: 24 9.8% 10%;
+		--card-foreground: 0 0% 95%;
+		--popover: 0 0% 9%;
+		--popover-foreground: 0 0% 95%;
+		--primary: 346.8 77.2% 49.8%;
+		--primary-foreground: 355.7 100% 97.3%;
+		--secondary: 240 3.7% 15.9%;
+		--secondary-foreground: 0 0% 98%;
+		--muted: 0 0% 15%;
+		--muted-foreground: 240 5% 64.9%;
+		--accent: 12 6.5% 15.1%;
+		--accent-foreground: 0 0% 98%;
+		--destructive: 0 62.8% 30.6%;
+		--destructive-foreground: 0 85.7% 97.3%;
+		--border: 240 3.7% 15.9%;
+		--input: 240 3.7% 15.9%;
+		--ring: 346.8 77.2% 49.8%;
+	}
 }
 
 :root {
-  color-scheme: dark;
+	color-scheme: dark;
 }
 
 /**
@@ -71,13 +71,17 @@
  */
 
 *::selection {
-  @apply bg-red-500/30 text-neutral-100;
+	@apply bg-red-500/30 text-neutral-100;
+}
+
+* {
+	@apply transition-colors;
 }
 
 html,
 body {
-  @apply bg-neutral-900 text-neutral-100 font-thin;
-  font-family: Plex, monospace;
+	@apply bg-neutral-900 font-thin text-neutral-100;
+	font-family: Plex, monospace;
 }
 
 /* Font cursor override */
@@ -90,7 +94,7 @@ p,
 span,
 li,
 ol {
-  @apply cursor-default;
+	@apply cursor-default;
 }
 
 /* Heading styling */
@@ -100,32 +104,32 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: Rubik, monospace;
+	font-family: Rubik, monospace;
 }
 
 h1 {
-  @apply tracking-wide;
+	@apply tracking-wide;
 }
 
 h2 {
-  @apply tracking-wide;
+	@apply tracking-wide;
 }
 
 /* Dividers */
 hr {
-  @apply border-zinc-700;
-  /* @apply border-red-500; */
+	@apply border-zinc-700;
+	/* @apply border-red-500; */
 }
 
 /* Links */
 a {
-  @apply inline-block font-bold text-red-500 transition-colors duration-100 ease-in-out hover:text-red-300;
+	@apply inline-block font-bold text-red-500 transition-colors duration-100 ease-in-out hover:text-red-300;
 }
 a * {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 /* Lists */
 ul > li {
-  @apply ml-8 list-disc pr-4;
+	@apply ml-8 list-disc pr-4;
 }
