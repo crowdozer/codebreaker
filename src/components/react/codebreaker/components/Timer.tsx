@@ -1,10 +1,10 @@
 import { cn } from '@/components/react/ui'
-import { useCodebreaker } from '../useCodebreaker'
+import { useGame } from '../useCodebreaker'
 
 export default function Timer() {
 	const {
 		classes: { borderClasses, textClasses },
-	} = useCodebreaker()
+	} = useGame()
 
 	return (
 		<div
