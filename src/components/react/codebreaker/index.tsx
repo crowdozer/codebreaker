@@ -8,6 +8,18 @@ import GameBoard from './components/GameBoard'
 
 export default function Codebreaker() {
 	const api = useCodebreaker()
+
+	/**
+	 * It should already be ready, but if it isn't, do this to be safe
+	 */
+	if (!api) {
+		return (
+			<div className="px-1 py-32 text-center xl:px-0">
+				<h1 className="text-yellow-300">Establishing connection...</h1>
+			</div>
+		)
+	}
+
 	const { bgClasses, borderClasses, textClasses } = api.classes
 
 	return (
