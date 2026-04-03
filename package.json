@@ -1,53 +1,33 @@
 {
-  "name": "",
-  "type": "module",
-  "version": "0.0.1",
+  "name": "codebreaker-next",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
-    "@astrojs/react": "^3.0.3",
-    "@astrojs/tailwind": "^5.0.2",
-    "@types/react": "^18.2.29",
-    "@types/react-dom": "^18.2.14",
-    "astro": "^3.3.2",
-    "astro-icon": "^0.8.1",
-    "clsx": "^2.0.0",
-    "prettier-plugin-astro": "^0.12.0",
+    "clsx": "^2.1.1",
+    "next": "16.2.2",
+    "postcss": "^8.5.8",
+    "prettier": "^3.8.1",
     "prettier-plugin-organize-attributes": "^1.0.0",
-    "prettier-plugin-tailwindcss": "^0.5.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "tailwind-merge": "^1.14.0",
-    "tailwindcss": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7"
   },
-  "prettier": {
-    "useTabs": true,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "all",
-    "astroAllowShorthand": true,
-    "overrides": [
-      {
-        "files": "*.astro",
-        "options": {
-          "parser": "astro"
-        }
-      }
-    ],
-    "pluginSearchDirs": [
-      "."
-    ],
-    "plugins": [
-      "tailwindcss-animate",
-      "prettier-plugin-astro",
-      "prettier-plugin-organize-attributes",
-      "prettier-plugin-tailwindcss"
-    ]
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.2",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5"
   }
 }

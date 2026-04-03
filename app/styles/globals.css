@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: Rubik;
+  src: url(/fonts/RubikMonoOne-Regular.ttf);
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Plex;
+  src: url(/fonts/IBMPlexMono-Medium.ttf);
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+/**
+ * Basic markup styling
+ */
+
+*::selection {
+  @apply bg-red-500/30 text-neutral-100;
+}
+
+* {
+  transition: color 0.2s ease-in;
+  transition: background-color 0.2s ease-in;
+}
+
+html,
+body {
+  @apply bg-neutral-900 font-thin text-neutral-100;
+  font-family: Plex, monospace;
+}
+
+/* Font cursor override */
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+span,
+li,
+ol {
+  @apply cursor-default;
+}
+
+/* Heading styling */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: Rubik, monospace;
+}
+
+h1 {
+  @apply tracking-wide;
+}
+
+h2 {
+  @apply tracking-wide;
+}
+
+/* Dividers */
+hr {
+  @apply border-zinc-700;
+  /* @apply border-red-500; */
+}
+
+/* Links */
+a {
+  @apply inline-block font-bold text-red-500 transition-colors duration-100 ease-in-out hover:text-red-300;
+}
+a * {
+  cursor: pointer;
+}
+
+/* Lists */
+ul > li {
+  @apply ml-8 list-disc pr-4;
+}
