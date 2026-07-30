@@ -1,6 +1,7 @@
 import { cn } from "@/app/components/ui";
 import { useGame } from "../useCodebreaker";
 import type { GameStatus, Sequence } from "../types";
+import type { ClassValue } from "clsx";
 
 export default function Sequences() {
   const {
@@ -36,7 +37,7 @@ interface SequenceTileProps {
   status: GameStatus;
   hexIndex: number;
   hex: string;
-  bgClasses: any;
+  bgClasses: ClassValue;
 }
 
 function SequenceTile(props: SequenceTileProps) {

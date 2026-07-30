@@ -1,4 +1,9 @@
-import type { KeyboardEventHandler, ReactNode } from 'react'
+import type {
+	KeyboardEvent,
+	KeyboardEventHandler,
+	MouseEvent,
+	ReactNode,
+} from 'react'
 import { cn } from '../utils'
 
 export interface ButtonProps {
@@ -11,7 +16,7 @@ export interface ButtonProps {
 	 *
 	 * @param event Click event
 	 */
-	onClick?: (event: any) => void
+	onClick?: (event: MouseEvent | KeyboardEvent) => void
 
 	type?: HTMLButtonElement['type']
 
@@ -57,7 +62,7 @@ export function Button(props: ButtonProps) {
 
 		if (['Enter', 'Spacebar', ' '].includes(event.key)) {
 			event.preventDefault()
-			onClick(event as any)
+			onClick(event)
 		}
 	}
 

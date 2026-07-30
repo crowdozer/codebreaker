@@ -6,7 +6,6 @@ import {
 	getInitialState,
 	isVictorious,
 	isDefeated,
-	getStatus,
 	getUIClasses,
 } from './utils'
 import type { CodebreakerAction, Tile, CodebreakerState } from './types'

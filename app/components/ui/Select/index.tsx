@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useState, type ReactNode, type ChangeEvent } from 'react'
 import { cn } from '../utils'
 
 export interface SelectProps {
@@ -16,10 +16,6 @@ export interface SelectProps {
 	 */
 	name: string
 	/**
-	 * Placeholder value
-	 */
-	placeholder?: string
-	/**
 	 * Value for the select
 	 */
 	value: HTMLSelectElement['value']
@@ -29,7 +25,7 @@ export interface SelectProps {
 	 * @param value Value from the event
 	 * @param event The event
 	 */
-	onChange: (value: any, event: any) => void
+	onChange: (value: string, event: ChangeEvent<HTMLSelectElement>) => void
 
 	disabled?: boolean
 
@@ -68,7 +64,6 @@ export interface SelectProps {
 		| 'onChange'
 		| 'value'
 		| 'disabled'
-		| 'placeholder'
 		| 'className'
 	>
 
@@ -99,7 +94,6 @@ export function Select(props: SelectProps) {
 		label = undefined,
 		name,
 		onChange,
-		placeholder = undefined,
 		value: initialValue = '',
 		width = 'max-w-full',
 		selectProps = {},
@@ -112,8 +106,8 @@ export function Select(props: SelectProps) {
 
 	const [value, setValue] = useState<HTMLSelectElement['value']>(initialValue)
 
-	function handleChange(event: any) {
-		let value = event.target.value
+	function handleChange(event: ChangeEvent<HTMLSelectElement>) {
+		const value = event.target.value
 		setValue(value)
 		onChange(value, event)
 	}
@@ -134,7 +128,6 @@ export function Select(props: SelectProps) {
 					id={id}
 					value={value}
 					name={name}
-					placeholder={placeholder}
 					className={cn(
 						// base styles
 						'border border-neutral-700 bg-transparent px-2 py-1',

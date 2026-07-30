@@ -1,6 +1,5 @@
-import Image from "next/image";
-import Codebreaker from "./components/codebreaker";
+import CodebreakerClient from "./components/CodebreakerClient";
 
 export default function Home() {
-  return <Codebreaker />;
+  return <CodebreakerClient />;
 }

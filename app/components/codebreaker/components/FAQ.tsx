@@ -25,7 +25,7 @@ export default function FAQ(props: FAQProps) {
             Your first move can be anywhere on the top row, the second one must
             be in the same column, then the same row, then column, and so forth.
           </p>
-          <p>If you run out of moves, you're detected and it's game over.</p>
+          <p>If you run out of moves, you&apos;re detected and it&apos;s game over.</p>
           <p>Currently, the breach timer is not implemented.</p>
           <p>Inspired by the Cyberpunk 2077 hacking minigame.</p>
         </div>

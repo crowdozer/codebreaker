@@ -44,6 +44,8 @@ export function useFocusFirstChild<T extends HTMLElement>(
 		if (child) {
 			child.focus()
 		}
+		// focusOnMount / mounted only gate first paint; shouldFocus is the driver
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [shouldFocus])
 
 	return rootNodeRef
@@ -56,7 +58,7 @@ export function useFocusFirstChild<T extends HTMLElement>(
  * @param ref A html element ref
  */
 function getFirstFocusableChild(
-	ref: RefObject<HTMLElement>,
+	ref: RefObject<HTMLElement | null>,
 ): FocusableElement | null {
 	if (!ref.current) {
 		return null

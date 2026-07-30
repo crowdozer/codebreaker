@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useState, type KeyboardEvent, type ReactNode } from 'react'
 import { cn, useFocusFirstChild } from '../utils'
 
 interface AccordionProps {
@@ -50,7 +50,7 @@ export function Accordion(props: AccordionProps) {
 
 	const [open, setOpen] = useState(defaultOpen)
 
-	const handleKeyDown = (event: any) => {
+	const handleKeyDown = (event: KeyboardEvent) => {
 		if (['Enter', 'Spacebar', ' '].includes(event.key)) {
 			setOpen(!open)
 		}

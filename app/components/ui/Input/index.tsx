@@ -1,4 +1,4 @@
-import { useState, type ReactNode, type HTMLInputTypeAttribute } from 'react'
+import { useState, type ReactNode, type ChangeEvent } from 'react'
 import { cn } from '../utils'
 
 export interface InputProps {
@@ -33,7 +33,7 @@ export interface InputProps {
 	 * @param value Value from the event
 	 * @param event The event
 	 */
-	onChange: (value: any, event: any) => void
+	onChange: (value: string, event: ChangeEvent<HTMLInputElement>) => void
 
 	disabled?: boolean
 
@@ -118,8 +118,8 @@ export function Input(props: InputProps) {
 
 	const [value, setValue] = useState<HTMLInputElement['value']>(initialValue)
 
-	function handleChange(event: any) {
-		let value = event.target.value
+	function handleChange(event: ChangeEvent<HTMLInputElement>) {
+		const value = event.target.value
 		setValue(value)
 		onChange(value, event)
 	}

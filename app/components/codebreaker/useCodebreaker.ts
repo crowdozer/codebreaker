@@ -8,7 +8,7 @@ import reducer from './reducer'
  */
 export function useCodebreaker(): CodebreakerAPI {
 	const [state, dispatch] = useReducer(reducer, getInitialState())
-	const timerIntervalRef = useRef<number | null>(null)
+	const timerIntervalRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
 	/**
 	 * Performs all required sideeffects when the user clicks a tile
@@ -97,6 +97,8 @@ export function useCodebreaker(): CodebreakerAPI {
 				clear()
 				break
 		}
+		// startCountdown closes over state; status is the intentional trigger
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [state.status])
 
 	return {
