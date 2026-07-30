@@ -241,7 +241,7 @@ export function generateBoard(
  *
  * @param array any array
  */
-export function shuffleInPlace(array: any[]): void {
+export function shuffleInPlace(array: unknown[]): void {
 	array.sort(() => (Math.random() > 0.5 ? 1 : -1))
 }
 
@@ -460,7 +460,7 @@ export function isDefeated(
 export function getStatus(
 	victory: boolean,
 	defeat: boolean,
-	moves: any[],
+	moves: unknown[],
 ): 'working' | 'victory' | 'defeat' | 'idle' {
 	if (victory) return 'victory'
 	if (defeat) return 'defeat'

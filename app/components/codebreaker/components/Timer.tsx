@@ -16,7 +16,7 @@ export default function Timer() {
   const [percentRemaining, setPercentRemaining] = useState<number>(100);
 
   // Stores the interval used to update the UI
-  const intervalRef = useRef<number | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   /**
    * Clears the interval used to update the UI
@@ -63,6 +63,7 @@ export default function Timer() {
     switch (status) {
       case "idle":
         // console.log('Timer >> "idle"')
+        // Sync display when game returns to idle (restart / initial)
         setTimeRemaining(formatMilliseconds(initialTimeRemaining * 1000));
         setPercentRemaining(100);
         break;
@@ -78,6 +79,8 @@ export default function Timer() {
     }
 
     return () => clear();
+    // initialTimeRemaining is fixed per round; status drives reset
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- startCountdown lifecycle
   }, [status, updateTimer]);
 
   return (
