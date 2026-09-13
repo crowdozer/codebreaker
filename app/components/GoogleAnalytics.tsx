@@ -22,6 +22,16 @@ window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', '${GA_MEASUREMENT_ID}', {
+  cookie_domain: 'ovo7.space',
+  linker: {
+    domains: [
+      'ovo7.space',
+      'www.ovo7.space',
+      'ascii.ovo7.space',
+      'atlas.ovo7.space',
+      'codebreaker.ovo7.space',
+    ],
+  },
   page_title: 'Codebreaker',
 });
 `}
