@@ -1,6 +1,7 @@
 /**
  * Match every suffix prefix so overlaps and repeated values keep their identity.
  */
+
 import type { Sequence } from './types'
 
 /** Replay the buffer, preserving earned completions and current pending strands. */
