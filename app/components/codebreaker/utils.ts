@@ -37,6 +37,7 @@ export function getInitialState(): CodebreakerState {
 	const remainingMoves = getInitialRemainingMoves(sequences)
 
 	return {
+		generation: 0,
 		moves: [],
 		board: initialBoard,
 		sequences,
@@ -98,29 +99,6 @@ export function isTileClickable(
 		case 'row':
 			return tile.yCoord === lastRowIndex
 	}
-}
-
-/**
- * Returns the last n hex values that were clicked
- *
- * @param board the current board state
- * @param moves all moves made thus far
- * @param n number of values to return
- */
-export function getLastNClickedValues(
-	board: CodebreakerBoard,
-	moves: string[],
-	n: number,
-): string[] {
-	// slice for the trailing n entries
-	// then map them to board tiles
-	return moves.slice(n * -1).map((moveStr) => {
-		// convert to numbers for use in indexes
-		const [yCoord, xCoord] = moveStr.split('-').map(Number)
-
-		// grab the board tiles and return
-		return board[yCoord][xCoord].value
-	})
 }
 
 /**
@@ -357,41 +335,6 @@ export function getSelectionMode(moves: string[]): SelectionMode {
 	}
 
 	return 'row'
-}
-
-/**
- * Returns how many uninterrupted correct matches the user has made.
- * Resets the count when an incorrect match is made.
- * Both arrays are guaranteed to be equal length.
- *
- * @param userSelection the last hex values selected by the user
- * @param goalSequence the target hex sequence
- * @returns the number of uninterrupted matches
- */
-export function countMatchingElements(
-	userSelection: string[],
-	goalSequence: string[],
-): number {
-	if (!userSelection.length) return 0
-
-	let score = 0
-
-	for (let i = 0; i < userSelection.length; i++) {
-		const wantedHex = goalSequence[score]
-		// In the event of a double selection (i.e 6C 6C)
-		// We need to compare to both the current & first value
-		const firstHex = goalSequence[0]
-
-		if (userSelection[i] === wantedHex) {
-			score++
-		} else if (userSelection[i] === firstHex) {
-			score = 1
-		} else {
-			score = 0
-		}
-	}
-
-	return score
 }
 
 /**

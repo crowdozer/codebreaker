@@ -48,20 +48,16 @@ export default function GameBoard() {
                       classes={{
                         button: cn(
                           "cb-cell w-full p-2.5 text-sm sm:text-base sm:p-4 border border-transparent hover:bg-unset",
-                          // live board: active line waves, hovered line previews
                           live && {
-                            "text-yellow-300": true,
+                            "text-yellow-300": !col.clicked,
                             "cb-active": active,
                             "cb-preview": inPreview && !active,
-                            "cb-hit bg-yellow-300 text-neutral-950": col.clicked,
                           },
-                          // when the game is won, clicked cells should be green
-                          status === "victory" && {
-                            "bg-green-500 text-neutral-950": col.clicked,
-                          },
-                          // when the game is lost, clicked cells should be red
-                          status === "defeat" && {
-                            "bg-red-500 text-neutral-950": col.clicked,
+                          col.clicked && {
+                            "cb-hit text-neutral-950": true,
+                            "bg-yellow-300": col.strand === "pending",
+                            "bg-green-500": col.strand === "complete",
+                            "bg-red-500": col.strand === "broken",
                           },
                         ),
                       }}

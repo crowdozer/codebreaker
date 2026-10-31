@@ -8,6 +8,7 @@ export interface Sequence {
 }
 
 export interface Tile {
+	strand?: 'pending' | 'complete' | 'broken'
 	value: string
 	xCoord: number
 	yCoord: number
@@ -46,6 +47,7 @@ export type GameStyleClasses = {
  * Internal application state
  */
 export interface CodebreakerState {
+	generation: number
 	/**
 	 * Keeps track of all moves that have been made thus far
 	 * ["xcoord1-ycoord1", "xcoord2-ycoord2", etc]
@@ -117,6 +119,7 @@ export interface CodebreakerState {
  * Exposed application state, for the component
  */
 export interface CodebreakerAPI {
+	generation: number
 	victory: boolean
 	defeat: boolean
 	// The moves that have been made so far

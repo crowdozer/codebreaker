@@ -69,6 +69,7 @@ export function useCodebreaker(): CodebreakerAPI {
 	 * setup/restart the game
 	 */
 	function initialize() {
+		clear()
 		dispatch({ type: 'SETUP' })
 		dispatch({ type: 'ENABLE_FIRST_ROW' })
 	}
@@ -77,7 +78,8 @@ export function useCodebreaker(): CodebreakerAPI {
 	 * Run setup on mount
 	 */
 	useEffect(() => {
-		initialize()
+		dispatch({ type: 'SETUP' })
+		dispatch({ type: 'ENABLE_FIRST_ROW' })
 	}, [])
 
 	/**
@@ -97,11 +99,13 @@ export function useCodebreaker(): CodebreakerAPI {
 				clear()
 				break
 		}
+		return clear
 		// startCountdown closes over state; status is the intentional trigger
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [state.status])
 
 	return {
+		generation: state.generation,
 		moves: state.moves,
 		victory: state.victory,
 		defeat: state.defeat,
