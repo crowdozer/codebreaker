@@ -25,8 +25,9 @@
 }
 
 * {
-  transition: color 0.2s ease-in;
-  transition: background-color 0.2s ease-in;
+  transition:
+    color 0.2s ease-in,
+    background-color 0.2s ease-in;
 }
 
 html,
@@ -83,4 +84,319 @@ a * {
 /* Lists */
 ul > li {
   @apply ml-8 list-disc pr-4;
+}
+
+/*******************************************
+ * FAKE OS FX                              *
+ ******************************************/
+
+/**
+ * FX knobs. --accent follows game status via [data-status] and mirrors the
+ * palette in getUIClasses(). JS-driven timings live in codebreaker/fx/config.ts.
+ */
+:root {
+  --fx-bg: #050505;
+  --fx-frame-bg: color-mix(in srgb, var(--color-neutral-950, #0a0a0a) 88%, transparent);
+  --fx-dot: rgb(255 255 255 / 0.05);
+  --fx-stream-speed: 90s;
+  --accent: var(--color-neutral-300, #d4d4d4);
+}
+
+/* declared here, not :root, so var(--accent) resolves per status */
+[data-status] {
+  --header-bg: var(--accent);
+  --header-fg: var(--color-neutral-950, #0a0a0a);
+}
+
+[data-status="idle"] {
+  --accent: var(--color-neutral-300, #d4d4d4);
+  --header-bg: var(--color-neutral-800, #262626);
+  --header-fg: var(--color-neutral-200, #e5e5e5);
+}
+[data-status="working"] {
+  --accent: var(--color-yellow-300, #fde047);
+}
+[data-status="defeat"] {
+  --accent: var(--color-red-500, #ef4444);
+}
+[data-status="victory"] {
+  --accent: var(--color-green-400, #4ade80);
+}
+
+/* Still backdrop: faint dot grid. Background terminals sit above it. */
+html,
+body {
+  background-color: var(--fx-bg);
+}
+
+body {
+  /* own stacking context so the background terminals (-z) paint above the body background */
+  isolation: isolate;
+  background-image: radial-gradient(var(--fx-dot) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Type */
+.cb-display {
+  font-family: Rubik, monospace;
+}
+
+.cb-label {
+  font-family: Plex, monospace;
+  /* beat the global h2 tracking so panel headers keep the bar's spacing */
+  letter-spacing: inherit;
+}
+
+/* Surfaces */
+.cb-frame {
+  background: var(--fx-frame-bg);
+}
+
+.cb-accent-text {
+  color: var(--accent);
+}
+
+.cb-accent-bg {
+  background-color: var(--accent);
+}
+
+.cb-header-filled {
+  background-color: var(--header-bg);
+  color: var(--header-fg);
+}
+
+/* Panels wipe in once on load (backwards fill: no clip left behind after) */
+.cb-boot {
+  animation: cb-boot 0.45s ease-out backwards;
+}
+
+/* Typed-text cursor */
+.cb-cursor {
+  margin-left: 0.1em;
+}
+
+.cb-cursor-blink {
+  animation: cb-blink 1s steps(1) infinite;
+}
+
+/* Matrix cells: tint layer (::before) and click ping (::after) sit behind the text */
+.cb-cell {
+  position: relative;
+  isolation: isolate;
+  transition:
+    background-color 0.12s ease-out,
+    border-color 0.12s ease-out,
+    transform 0.08s ease-out;
+}
+
+.cb-cell::before,
+.cb-cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.cb-cell:not(:disabled):active {
+  transform: scale(0.9);
+}
+
+/* Active line: a tint wave travels along it (delay set per cell via --wave-delay) */
+.cb-active::before {
+  background-color: color-mix(in srgb, var(--accent) 22%, transparent);
+  opacity: 0.35;
+  animation: cb-wave 2.2s ease-in-out infinite;
+  animation-delay: var(--wave-delay, 0ms);
+}
+
+.cb-active:hover,
+.cb-active:focus-visible {
+  border-color: var(--accent);
+  background-color: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* Line the player would be locked to after picking the hovered cell */
+.cb-preview {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  border-style: dashed;
+  /* lift previewed cells out of the disabled dimming */
+  opacity: 0.9;
+}
+
+.cb-hit {
+  animation: cb-hit 0.3s ease-out;
+}
+
+.cb-hit::after {
+  border: 1px solid var(--accent);
+  animation: cb-ping 0.5s ease-out forwards;
+}
+
+/* Buffer + vectors */
+.cb-slot-used {
+  animation: cb-slot-in 0.3s ease-out;
+}
+
+.cb-ghost {
+  animation: cb-ghost 0.8s steps(1) infinite;
+}
+
+.cb-hint {
+  outline: 1px solid var(--accent);
+  outline-offset: 1px;
+  color: var(--accent);
+}
+
+.cb-flash {
+  animation: cb-flash 0.6s ease-out;
+}
+
+/* Terminals */
+.cb-line-in {
+  animation: cb-line-in 0.25s steps(8) backwards;
+}
+
+.cb-stream {
+  animation: cb-stream var(--fx-stream-speed) linear infinite;
+}
+
+/* Timer + status */
+.cb-bar-critical {
+  animation: cb-pulse 0.5s ease-in-out infinite alternate;
+}
+
+.cb-shake {
+  animation: cb-shake 0.4s ease-in-out;
+}
+
+/*******************************************
+ * FAKE OS FX KEYFRAMES                    *
+ ******************************************/
+
+@keyframes cb-boot {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes cb-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes cb-ghost {
+  50% {
+    color: transparent;
+  }
+}
+
+@keyframes cb-wave {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  20% {
+    opacity: 1;
+  }
+}
+
+@keyframes cb-hit {
+  0% {
+    transform: scale(0.85);
+    filter: brightness(1.8);
+  }
+  100% {
+    transform: scale(1);
+    filter: none;
+  }
+}
+
+@keyframes cb-ping {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes cb-slot-in {
+  from {
+    transform: scaleY(0.2);
+    filter: brightness(2);
+  }
+  to {
+    transform: scaleY(1);
+    filter: none;
+  }
+}
+
+@keyframes cb-flash {
+  from {
+    filter: brightness(2);
+  }
+  to {
+    filter: none;
+  }
+}
+
+@keyframes cb-line-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes cb-stream {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes cb-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.35;
+  }
+}
+
+@keyframes cb-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+/* Motion-sensitive users get the look without the movement */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+  }
 }

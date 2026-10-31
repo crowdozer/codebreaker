@@ -4,12 +4,7 @@ import { useGame } from "../useCodebreaker";
 import { formatMilliseconds } from "../utils";
 
 export default function Timer() {
-  const {
-    initialTimeRemaining,
-    startTime,
-    status,
-    classes: { borderClasses, textClasses },
-  } = useGame();
+  const { initialTimeRemaining, startTime, status } = useGame();
 
   // Stores the output for the time remaining shown on the UI
   const [timeRemaining, setTimeRemaining] = useState<string>("00:00");
@@ -84,30 +79,28 @@ export default function Timer() {
   }, [status, updateTimer]);
 
   return (
-    <div className="space-y-2">
-      <div className="flex flex-row justify-between">
-        <h2 className={cn("self-center text-lg", textClasses)}>
-          BREACH TIME <span className="hidden sm:inline-block">REMAINING</span>
-        </h2>
-        <div className="flex flex-col gap-2">
-          <div
-            className={cn(
-              "min-w-[92px] self-center border p-2 text-center text-xl",
-              borderClasses,
-              textClasses,
-            )}
-          >
-            {timeRemaining}
-          </div>
-        </div>
+    <div className="flex items-center gap-4 p-3">
+      <div className="cb-display cb-accent-text min-w-[5ch] text-2xl lg:text-3xl">
+        {timeRemaining}
       </div>
-      <div
-        className={cn("border-b-4", borderClasses)}
-        style={{ width: `${percentRemaining}%` }}
-      ></div>
+      <div className="h-1.5 grow bg-neutral-800">
+        <div
+          className={cn(
+            "cb-accent-bg h-full",
+            // pulse once the breach window is nearly closed
+            status === "working" &&
+              percentRemaining < CRITICAL_PERCENT &&
+              "cb-bar-critical",
+          )}
+          style={{ width: `${percentRemaining}%` }}
+        ></div>
+      </div>
     </div>
   );
 }
 
 // The exact interval doesn't matter as long as it's weird enough to look random
 const INTERVAL_LENGTH_MS = 31;
+
+// Below this share of time left, the timer bar starts pulsing
+const CRITICAL_PERCENT = 25;

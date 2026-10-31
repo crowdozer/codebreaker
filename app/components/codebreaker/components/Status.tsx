@@ -1,41 +1,51 @@
+import { useMemo } from "react";
 import { Button, cn } from "@/app/components/ui";
 import { getRandomInt } from "../utils";
 import { useGame } from "../useCodebreaker";
+import type { GameStatus } from "../types";
+import DecodeText from "../fx/DecodeText";
+import TypeText from "../fx/TypeText";
 
 export default function Status() {
   const { status } = useGame();
 
+  // pick once per status change; re-rolling on every render would retype
+  // the message each time anything else in the game updates
+  const message = useMemo(() => getMessage(status), [status]);
+
   return (
-    <div className="p-4">
+    <div className="space-y-3 p-4">
+      {/* Game over banner */}
+      {(status === "defeat" || status === "victory") && (
+        <p className="cb-display cb-accent-text text-lg lg:text-2xl">
+          <DecodeText
+            text={status === "defeat" ? "TRACE DETECTED" : "ACCESS GRANTED"}
+          />
+        </p>
+      )}
+
+      <p
+        className={cn("text-sm lg:text-base", {
+          "text-red-500": status === "defeat",
+          "text-green-500": status === "victory",
+          "text-yellow-300": status === "working",
+        })}
+      >
+        <span className="text-neutral-500">{"> "}</span>
+        <TypeText text={message} />
+      </p>
+
       {/* Defeat Msg */}
-      {status === "defeat" && (
-        <div>
-          <p className="mb-2 text-red-500">{getDefeatMessage()}</p>
-          <RestartButton text="TRY AGAIN" />
-        </div>
-      )}
+      {status === "defeat" && <RestartButton text="TRY AGAIN" />}
       {/* Victory Msg */}
-      {status === "victory" && (
-        <div>
-          <p className="mb-2 text-green-500">{getVictoryMessage()}</p>
-          <RestartButton text="PlAY AGAIN" />
-        </div>
-      )}
+      {status === "victory" && <RestartButton text="PlAY AGAIN" />}
       {/* Working Msg */}
-      {status === "working" && (
-        <div>
-          <p className="mb-2 text-yellow-300">HACKING...</p>
-          <RestartButton text="PULL THE PLUG" />
-        </div>
-      )}
+      {status === "working" && <RestartButton text="PULL THE PLUG" />}
       {/* Idle Msg */}
       {status === "idle" && (
-        <div>
-          <p>{getIdleMessage()}</p>
-          {/* show an invisible button for maintaining height */}
-          <div className="invisible">
-            <Button>no-op</Button>
-          </div>
+        // show an invisible button for maintaining height
+        <div className="invisible">
+          <Button>no-op</Button>
         </div>
       )}
     </div>
@@ -51,7 +61,13 @@ function RestartButton(props: { text?: string }) {
   return (
     <Button
       onClick={restart}
-      classes={{ button: cn(borderClasses, textClasses) }}
+      classes={{
+        button: cn(
+          "uppercase tracking-[0.12em] hover:bg-neutral-800 active:scale-95",
+          borderClasses,
+          textClasses,
+        ),
+      }}
     >
       {props.text || "try again"}
     </Button>
@@ -107,4 +123,20 @@ export function getDefeatMessage(): string {
 
 export function getIdleMessage(): string {
   return idleMessages[getRandomInt(0, idleMessages.length - 1)];
+}
+
+/**
+ * The status line for a game status
+ */
+function getMessage(status: GameStatus): string {
+  switch (status) {
+    case "defeat":
+      return getDefeatMessage();
+    case "victory":
+      return getVictoryMessage();
+    case "working":
+      return "HACKING...";
+    case "idle":
+      return getIdleMessage();
+  }
 }

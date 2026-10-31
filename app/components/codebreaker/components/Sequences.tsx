@@ -1,14 +1,11 @@
 import { cn } from "@/app/components/ui";
 import { useGame } from "../useCodebreaker";
+import { useHover } from "../fx/hover";
 import type { GameStatus, Sequence } from "../types";
-import type { ClassValue } from "clsx";
 
 export default function Sequences() {
-  const {
-    sequences,
-    status,
-    classes: { bgClasses },
-  } = useGame();
+  const { sequences, status } = useGame();
+  const { hovered } = useHover();
 
   return (
     <table>
@@ -18,11 +15,11 @@ export default function Sequences() {
             {seq.values.map((hex, hexIndex) => (
               <SequenceTile
                 key={hexIndex}
-                bgClasses={bgClasses}
                 hex={hex}
                 hexIndex={hexIndex}
                 sequence={seq}
                 status={status}
+                hoveredValue={hovered?.value ?? null}
               />
             ))}
           </tr>
@@ -37,11 +34,11 @@ interface SequenceTileProps {
   status: GameStatus;
   hexIndex: number;
   hex: string;
-  bgClasses: ClassValue;
+  hoveredValue: string | null;
 }
 
 function SequenceTile(props: SequenceTileProps) {
-  const { sequence, status, hexIndex, hex, bgClasses } = props;
+  const { sequence, status, hexIndex, hex, hoveredValue } = props;
 
   // If the given tile is part of a partially solved sequence
   const isPartiallySolved =
@@ -53,17 +50,26 @@ function SequenceTile(props: SequenceTileProps) {
   // If it's game over
   const isGameOver = status === "victory" || status === "defeat";
 
+  // The hovered matrix cell would advance this vector
+  const isHinted =
+    !isGameOver &&
+    !sequence.solved &&
+    hexIndex === sequence.progress &&
+    hex === hoveredValue;
+
   return (
     <td key={hexIndex} className="p-0.5 text-center">
       <div
         className={cn(
-          "border border-neutral-800 bg-neutral-800/50 px-4 py-0.5 md:py-2",
+          "border border-neutral-800 bg-neutral-900 px-4 py-0.5 md:py-2",
           // partial sequence solving status
           isPartiallySolved && "bg-yellow-300 text-neutral-950",
           // sequence is locked in
-          isFullySolved && "bg-green-400 text-neutral-950",
+          isFullySolved && "cb-flash bg-green-400 text-neutral-950",
           // victory or defeat
-          isGameOver && bgClasses,
+          isGameOver && "cb-header-filled",
+          // hover preview
+          isHinted && "cb-hint",
         )}
       >
         {hex}
