@@ -8,6 +8,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/app/components/ui";
 import { FX } from "./config";
+import type { CodebreakerBoard } from "../types";
 import type { LineSeed, LineTone } from "./lines";
 import { prefersReducedMotion, randomBetween } from "./motion";
 
@@ -16,6 +17,7 @@ export interface TermLine extends LineSeed {
 }
 
 interface TerminalProps {
+  board?: CodebreakerBoard;
   title: string;
   lines: TermLine[];
   className?: string;
@@ -34,7 +36,7 @@ const TONES: Record<LineTone, string> = {
  * newest lines at the bottom.
  */
 export default function Terminal(props: TerminalProps) {
-  const { title, lines, className } = props;
+  const { title, lines, className, board } = props;
 
   return (
     <div
@@ -58,6 +60,14 @@ export default function Terminal(props: TerminalProps) {
             )}
           >
             {line.text}
+            {line.cells?.map((cell, i) => {
+              const tile = board?.[cell.y]?.[cell.x];
+              return <span key={i} className={cn({
+                "text-yellow-300": tile?.strand === "pending",
+                "text-green-400": tile?.strand === "complete",
+                "text-red-400": tile?.strand === "broken",
+              })}>{i > 0 ? " " : ""}{tile?.value}</span>;
+            })}
           </p>
         ))}
       </div>
@@ -71,7 +81,7 @@ export default function Terminal(props: TerminalProps) {
  */
 export function useTerminalLines(initial?: () => LineSeed[]) {
   const [lines, setLines] = useState<TermLine[]>(() =>
-    (initial?.() ?? []).map((seed, i) => ({ ...seed, id: -(i + 1) })).reverse(),
+    (initial?.() ?? []).slice(-FX.terminalMaxLines).map((seed, i) => ({ ...seed, id: -(i + 1) })).reverse(),
   );
   const nextId = useRef(0);
 

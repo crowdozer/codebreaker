@@ -1,15 +1,16 @@
 /**
- * Fake log content for the cosmetic terminals. Pure flavor - none of it
- * reflects real game state except the lines SysLog builds itself.
+ * Terminal log content, including live board-cell references for mem.dump.
  */
 
-import { pick, randomBetween, randomByte } from './motion'
+import type { CodebreakerBoard } from '../types'
+import { pick, randomBetween } from './motion'
 
 export type LineTone = 'dim' | 'text' | 'accent' | 'ok' | 'err'
 
 export interface LineSeed {
 	text: string
 	tone?: LineTone
+	cells?: { y: number; x: number }[]
 }
 
 const DAEMONS = ['icebreakd', 'netwatchd', 'memsweep', 'kproxy', 'ghostlink', 'cronjack', 'daemon.sys']
@@ -35,10 +36,14 @@ const CHATTER = [
 /**
  * A hex dump row: "0x00A0  4F 2B 9C ..."
  */
-export function hexDumpLine(): LineSeed {
+export function hexDumpLine(board: CodebreakerBoard): LineSeed {
 	const addr = randomBetween(0, 0xffff).toString(16).toUpperCase().padStart(4, '0')
-	const bytes = Array.from({ length: 8 }, randomByte).join(' ')
-	return { text: `0x${addr}  ${bytes}`, tone: 'dim' }
+	const tiles = board.flat()
+	const cells = Array.from({ length: 8 }, () => {
+		const tile = pick(tiles)
+		return { y: tile.yCoord, x: tile.xCoord }
+	})
+	return { text: `0x${addr}  `, tone: 'dim', cells }
 }
 
 /**

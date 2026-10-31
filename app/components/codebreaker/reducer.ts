@@ -1,6 +1,5 @@
+import { strandProgress } from './progress'
 import {
-	countMatchingElements,
-	getLastNClickedValues,
 	getSelectionMode,
 	isTileClickable,
 	getInitialState,
@@ -21,10 +20,12 @@ export default function reducer(
 		case 'SETUP':
 			return {
 				...getInitialState(),
+				generation: state.generation + 1,
 			}
 		case 'RESTART':
 			return {
 				...getInitialState(),
+				generation: state.generation + 1,
 			}
 		case 'ENABLE_FIRST_ROW': {
 			return {
@@ -75,36 +76,20 @@ export default function reducer(
 					})
 				}),
 			}
-		case 'UPDATE_SEQUENCES':
+		case 'UPDATE_SEQUENCES': {
+			const progress = strandProgress(state.moves.map((move) => {
+				const [y, x] = move.split('-').map(Number)
+				return state.board[y][x].value
+			}), state.sequences)
 			return {
 				...state,
-				/**
-				 * This could be optimized by storing the longest sequence length
-				 * in state, then calling getLastNClickedValues() outside of the loop
-				 *
-				 * But this isn't a very performance intensive app, so its fine
-				 */
-				sequences: state.sequences.map((sequence) => {
-					// Nothing needs to happen if it's already solved
-					if (sequence.solved) return sequence
-
-					const seqLength = sequence.values.length
-					const relevantMoves = getLastNClickedValues(
-						state.board,
-						state.moves,
-						seqLength,
-					)
-
-					const matches = countMatchingElements(relevantMoves, sequence.values)
-					sequence.progress = matches
-
-					if (matches === seqLength) {
-						sequence.solved = true
-					}
-
-					return sequence
-				}),
+				sequences: progress.sequences,
+				board: state.board.map((row) => row.map((tile) => ({
+					...tile,
+					strand: progress.states[state.moves.indexOf(`${tile.yCoord}-${tile.xCoord}`)],
+				}))),
 			}
+		}
 		case 'UPDATE_REMAINING_MOVES': {
 			return {
 				...state,

@@ -34,7 +34,7 @@ export default function Codebreaker() {
     <GameContext.Provider value={api}>
       {/* data-status drives --accent for every cb-* fx class below */}
       <div data-status={status} className="flex grow flex-col">
-        <BackgroundTerminals />
+        <BackgroundTerminals key={api.generation} />
 
         <div className="mx-auto w-full px-1 py-1 xl:w-[80%] xl:px-0 xl:py-8">
           {/* OS WINDOW */}
