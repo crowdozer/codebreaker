@@ -19,7 +19,7 @@ export default function Buffer() {
     <div className="flex h-full flex-row">
       <div
         className={cn(
-          "flex w-full flex-col justify-center border bg-neutral-900 p-2 xl:w-auto",
+          "cb-panel flex w-full flex-col justify-center border p-2 xl:w-auto",
           borderClasses,
         )}
       >
@@ -28,6 +28,8 @@ export default function Buffer() {
             <div
               key={index}
               className={cn("grow border px-0 py-4 xl:grow-0 xl:px-4", {
+                // fill-in flash as each slot is consumed
+                "cb-slot-used": index < detectedIndex,
                 // Remaining move available
                 "border-neutral-800 bg-neutral-800/25": index >= detectedIndex,
                 // Move is not available

@@ -61,7 +61,7 @@ function SequenceTile(props: SequenceTileProps) {
           // partial sequence solving status
           isPartiallySolved && "bg-yellow-300 text-neutral-950",
           // sequence is locked in
-          isFullySolved && "bg-green-400 text-neutral-950",
+          isFullySolved && "cb-flash bg-green-400 text-neutral-950",
           // victory or defeat
           isGameOver && bgClasses,
         )}

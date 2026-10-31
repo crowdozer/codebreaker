@@ -25,8 +25,9 @@
 }
 
 * {
-  transition: color 0.2s ease-in;
-  transition: background-color 0.2s ease-in;
+  transition:
+    color 0.2s ease-in,
+    background-color 0.2s ease-in;
 }
 
 html,
@@ -83,4 +84,303 @@ a * {
 /* Lists */
 ul > li {
   @apply ml-8 list-disc pr-4;
+}
+
+/*******************************************
+ * CYBERPUNK FX                            *
+ ******************************************/
+
+/**
+ * FX knobs - tweak these to tune the look without touching components.
+ * --neon follows game status (see [data-status] below), the accents are
+ * decorative only and never carry game meaning.
+ */
+:root {
+  --fx-accent-a: #00f0ff; /* cyan */
+  --fx-accent-b: #ff2a6d; /* magenta */
+  --fx-bg: #07060d;
+  --fx-scanline-opacity: 0.18;
+  --fx-grid-opacity: 0.22;
+  --fx-grid-speed: 6s;
+  --fx-glitch-every: 4s;
+  --fx-glow: 10px;
+  --neon: #a3a3a3;
+}
+
+[data-status="idle"] {
+  --neon: var(--fx-accent-a);
+}
+[data-status="working"] {
+  --neon: var(--color-yellow-300, #fde047);
+}
+[data-status="defeat"] {
+  --neon: var(--color-red-500, #ef4444);
+}
+[data-status="victory"] {
+  --neon: var(--color-green-400, #4ade80);
+}
+
+/* Backdrop: neon haze + receding grid floor */
+html,
+body {
+  background-color: var(--fx-bg);
+}
+
+body {
+  /* own stacking context so the grid (z -1) paints above the body background */
+  isolation: isolate;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 15% 0%, color-mix(in srgb, var(--fx-accent-b) 22%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 90% 10%, color-mix(in srgb, var(--fx-accent-a) 16%, transparent), transparent 70%);
+  background-attachment: fixed;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 45% -50% -10% -50%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--fx-grid-opacity);
+  background-image:
+    linear-gradient(to right, var(--fx-accent-b) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--fx-accent-b) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: perspective(500px) rotateX(60deg);
+  transform-origin: top center;
+  mask-image: linear-gradient(to bottom, transparent, black 40%);
+  animation: cb-grid-scroll var(--fx-grid-speed) linear infinite;
+}
+
+/* CRT scanlines + vignette, above everything but never clickable */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom, rgb(0 0 0 / var(--fx-scanline-opacity)) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 60%, rgb(0 0 0 / 0.55) 100%);
+  animation: cb-flicker 6s steps(1) infinite;
+}
+
+/* Glitch title: needs data-text equal to the visible text; owns ::before/::after */
+.cb-glitch {
+  position: relative;
+  display: inline-block;
+}
+
+.cb-glitch::before,
+.cb-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.cb-glitch::before {
+  color: var(--fx-accent-a);
+  animation: cb-glitch-a var(--fx-glitch-every) infinite steps(1);
+}
+
+.cb-glitch::after {
+  color: var(--fx-accent-b);
+  animation: cb-glitch-b var(--fx-glitch-every) infinite steps(1);
+}
+
+/* Neon panel with HUD corner brackets */
+.cb-panel {
+  position: relative;
+  box-shadow:
+    0 0 var(--fx-glow) color-mix(in srgb, var(--neon) 35%, transparent),
+    inset 0 0 calc(var(--fx-glow) * 2) color-mix(in srgb, var(--neon) 8%, transparent);
+  background-color: rgb(10 9 18 / 0.72);
+  backdrop-filter: blur(2px);
+  transition: box-shadow 0.3s ease-in;
+}
+
+.cb-panel::before,
+.cb-panel::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  border-color: var(--fx-accent-a);
+  border-style: solid;
+}
+
+.cb-panel::before {
+  top: -5px;
+  left: -5px;
+  border-width: 2px 0 0 2px;
+}
+
+.cb-panel::after {
+  right: -5px;
+  bottom: -5px;
+  border-width: 0 2px 2px 0;
+  border-color: var(--fx-accent-b);
+}
+
+.cb-neon-text {
+  text-shadow: 0 0 6px color-mix(in srgb, var(--neon) 70%, transparent);
+}
+
+/* Header bar sweep */
+.cb-sweep {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--neon) 45%, transparent);
+}
+
+.cb-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 40%, rgb(255 255 255 / 0.28) 50%, transparent 60%);
+  transform: translateX(-100%);
+  animation: cb-sweep 5s ease-in-out infinite;
+}
+
+/* Code matrix cells */
+.cb-cell {
+  transition:
+    background-color 0.15s ease-in,
+    box-shadow 0.15s ease-in,
+    text-shadow 0.15s ease-in;
+}
+
+.cb-cell:not(:disabled) {
+  text-shadow: 0 0 6px color-mix(in srgb, var(--neon) 60%, transparent);
+}
+
+.cb-cell:not(:disabled):hover {
+  border-color: var(--neon);
+  box-shadow:
+    0 0 10px color-mix(in srgb, var(--neon) 60%, transparent),
+    inset 0 0 8px color-mix(in srgb, var(--neon) 30%, transparent);
+}
+
+.cb-hit {
+  animation: cb-hit 0.35s ease-out;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--neon) 70%, transparent);
+}
+
+/* Buffer slot fill + solved sequence flash */
+.cb-slot-used {
+  animation: cb-slot-in 0.4s ease-out;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--neon) 45%, transparent);
+}
+
+.cb-flash {
+  animation: cb-flash 0.6s ease-out;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--color-green-400, #4ade80) 60%, transparent);
+}
+
+/* Timer bar */
+.cb-bar {
+  box-shadow: 0 0 10px var(--neon);
+  transition: width 31ms linear;
+}
+
+.cb-bar-critical {
+  animation: cb-pulse 0.5s ease-in-out infinite alternate;
+}
+
+/* Status flourishes */
+.cb-shake {
+  animation: cb-shake 0.45s ease-in-out;
+}
+
+.cb-cursor::after {
+  content: "_";
+  margin-left: 0.15em;
+  animation: cb-blink 1s steps(1) infinite;
+}
+
+/*******************************************
+ * CYBERPUNK FX KEYFRAMES                  *
+ ******************************************/
+
+@keyframes cb-grid-scroll {
+  to {
+    background-position: 0 48px;
+  }
+}
+
+@keyframes cb-flicker {
+  0%, 100% { opacity: 1; }
+  41% { opacity: 0.85; }
+  42% { opacity: 1; }
+  78% { opacity: 0.9; }
+  79% { opacity: 1; }
+}
+
+@keyframes cb-glitch-a {
+  0%, 88%, 100% { clip-path: inset(0 0 100% 0); transform: none; }
+  90% { clip-path: inset(10% 0 60% 0); transform: translate(-3px, -1px); }
+  93% { clip-path: inset(55% 0 20% 0); transform: translate(3px, 1px); }
+  96% { clip-path: inset(30% 0 45% 0); transform: translate(-2px, 0); }
+}
+
+@keyframes cb-glitch-b {
+  0%, 88%, 100% { clip-path: inset(0 0 100% 0); transform: none; }
+  90% { clip-path: inset(65% 0 5% 0); transform: translate(3px, 1px); }
+  93% { clip-path: inset(20% 0 55% 0); transform: translate(-3px, -1px); }
+  96% { clip-path: inset(45% 0 30% 0); transform: translate(2px, 0); }
+}
+
+@keyframes cb-sweep {
+  0%, 60% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes cb-hit {
+  0% { transform: scale(1.15); filter: brightness(2); }
+  100% { transform: scale(1); filter: none; }
+}
+
+@keyframes cb-slot-in {
+  0% { transform: scaleY(0.2); filter: brightness(2.5); }
+  100% { transform: scaleY(1); filter: none; }
+}
+
+@keyframes cb-flash {
+  0% { filter: brightness(2.5); }
+  100% { filter: none; }
+}
+
+@keyframes cb-pulse {
+  from { opacity: 1; }
+  to { opacity: 0.35; }
+}
+
+@keyframes cb-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+
+@keyframes cb-blink {
+  50% { opacity: 0; }
+}
+
+/* Motion-sensitive users get the look without the movement */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+  }
+
+  .cb-glitch::before,
+  .cb-glitch::after {
+    display: none;
+  }
 }

@@ -15,7 +15,9 @@ export default function GameBoard() {
                   <Button
                     classes={{
                       button: cn(
-                        "w-full p-2.5 text-sm sm:text-base sm:p-4 border border-transparent hover:bg-unset",
+                        "cb-cell w-full p-2.5 text-sm sm:text-base sm:p-4 border border-transparent hover:bg-unset",
+                        // impact flash on the tile that was just picked
+                        col.clicked && "cb-hit",
                         // when the user is working, clicked cells should be yellow
                         // and hoverable indicators should be present
                         (status === "working" || status === "idle") && {

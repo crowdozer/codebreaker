@@ -86,13 +86,13 @@ export default function Timer() {
   return (
     <div className="space-y-2">
       <div className="flex flex-row justify-between">
-        <h2 className={cn("self-center text-lg", textClasses)}>
+        <h2 className={cn("cb-neon-text self-center text-lg", textClasses)}>
           BREACH TIME <span className="hidden sm:inline-block">REMAINING</span>
         </h2>
         <div className="flex flex-col gap-2">
           <div
             className={cn(
-              "min-w-[92px] self-center border p-2 text-center text-xl",
+              "cb-panel cb-neon-text min-w-[92px] self-center border p-2 text-center text-xl",
               borderClasses,
               textClasses,
             )}
@@ -102,7 +102,14 @@ export default function Timer() {
         </div>
       </div>
       <div
-        className={cn("border-b-4", borderClasses)}
+        className={cn(
+          "cb-bar border-b-4",
+          borderClasses,
+          // pulse once the breach window is nearly closed
+          status === "working" &&
+            percentRemaining < CRITICAL_PERCENT &&
+            "cb-bar-critical",
+        )}
         style={{ width: `${percentRemaining}%` }}
       ></div>
     </div>
@@ -111,3 +118,6 @@ export default function Timer() {
 
 // The exact interval doesn't matter as long as it's weird enough to look random
 const INTERVAL_LENGTH_MS = 31;
+
+// Below this share of time left, the timer bar starts pulsing
+const CRITICAL_PERCENT = 25;

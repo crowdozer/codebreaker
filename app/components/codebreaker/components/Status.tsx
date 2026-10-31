@@ -10,28 +10,34 @@ export default function Status() {
       {/* Defeat Msg */}
       {status === "defeat" && (
         <div>
-          <p className="mb-2 text-red-500">{getDefeatMessage()}</p>
+          <p className="cb-neon-text cb-cursor mb-2 text-red-500">
+            {getDefeatMessage()}
+          </p>
           <RestartButton text="TRY AGAIN" />
         </div>
       )}
       {/* Victory Msg */}
       {status === "victory" && (
         <div>
-          <p className="mb-2 text-green-500">{getVictoryMessage()}</p>
+          <p className="cb-neon-text cb-cursor mb-2 text-green-500">
+            {getVictoryMessage()}
+          </p>
           <RestartButton text="PlAY AGAIN" />
         </div>
       )}
       {/* Working Msg */}
       {status === "working" && (
         <div>
-          <p className="mb-2 text-yellow-300">HACKING...</p>
+          <p className="cb-neon-text cb-cursor mb-2 text-yellow-300">
+            HACKING...
+          </p>
           <RestartButton text="PULL THE PLUG" />
         </div>
       )}
       {/* Idle Msg */}
       {status === "idle" && (
         <div>
-          <p>{getIdleMessage()}</p>
+          <p className="cb-cursor">{getIdleMessage()}</p>
           {/* show an invisible button for maintaining height */}
           <div className="invisible">
             <Button>no-op</Button>
@@ -51,7 +57,7 @@ function RestartButton(props: { text?: string }) {
   return (
     <Button
       onClick={restart}
-      classes={{ button: cn(borderClasses, textClasses) }}
+      classes={{ button: cn("cb-cell", borderClasses, textClasses) }}
     >
       {props.text || "try again"}
     </Button>
