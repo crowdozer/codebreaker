@@ -1,6 +1,6 @@
 # Codebreaker
 
-https://codebreaker-app.vercel.app/
+https://codebreaker.ovo7.space/
 
 A hacking puzzle game inspired by the Cyberpunk 2077 hacking sequence.
 
@@ -12,7 +12,7 @@ The game alternates between moving laterally and moving vertically. Your first m
 
 If you run out of moves, you're detected and it's game over.
 
-![image](https://github.com/crowdozer/codebreaker/assets/32648607/3f4a7138-90f0-4042-b34d-d4326aad18f9)
+<img width="2549" height="1274" alt="image" src="https://github.com/user-attachments/assets/560e2501-38b5-4f02-99a7-8bd0fb5a50ac" />
 
 Built with [Next.js](https://nextjs.org) (App Router). Local webfonts live under `public/fonts/`.
 
